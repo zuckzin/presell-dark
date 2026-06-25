@@ -210,7 +210,8 @@
       done = true;
       pos = maxX;
       render();
-      setTimeout(() => window.open(BOT_URL, '_blank'), 500);
+      // navegação direta em vez de window.open: evita bloqueio de pop-up no mobile
+      setTimeout(() => { window.location.href = BOT_URL; }, 450);
     } else {
       pos = 0;
       render();
