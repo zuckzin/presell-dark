@@ -99,13 +99,32 @@
   .stat-row>div{flex:1;padding:12px 16px;} .stat-row>div+div{border-left:1px solid var(--line2);}
   .stat-row .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;} .stat-row .v{font-family:Sora;font-weight:700;font-size:20px;margin-top:3px;}
   .hist{max-height:320px;overflow:auto;}
-  .hrow{display:flex;align-items:center;gap:11px;padding:10px 16px;border-top:1px solid var(--line2);font-size:13px;}
+  .hrow{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line2);font-size:13px;cursor:pointer;transition:background .12s;}
+  .hrow:hover{background:var(--surface2);}
   .hrow .hd{width:8px;height:8px;border-radius:50%;flex:none;} .hrow .hdate{font-family:Sora;font-weight:600;min-width:52px;} .hrow .hwk{color:var(--muted);width:34px;font-size:12px;}
-  .hrow .hnote{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
-  .hrow .hval{margin-left:auto;font-weight:700;font-size:12.5px;font-family:Sora;flex:none;font-variant-numeric:tabular-nums;}
-  .hrow .hmeta{display:flex;flex-direction:column;gap:1px;color:var(--faint);font-size:10.5px;max-width:140px;text-align:right;flex:none;margin-left:8px;}
-  .hrow .hmeta span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .hrow .hedit{color:var(--parcial);font-size:10px;font-weight:600;}
+  .hrow .hnote{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:60px;}
+  .hrow .hval{font-weight:700;font-size:12.5px;font-family:Sora;flex:none;font-variant-numeric:tabular-nums;}
+  .hrow .hchev{color:var(--faint);font-size:10px;flex:none;transition:transform .2s;margin-left:4px;}
+  .hrow.open .hchev{transform:rotate(90deg);color:var(--accent);}
+  .hdetail{display:none;padding:12px 16px 14px;border-top:1px solid var(--line2);background:var(--bg2);}
+  .hdetail.show{display:block;}
+  .hd-sec{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:10px 0 6px;} .hd-sec:first-child{margin-top:0;}
+  .hd-pieces{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:5px;}
+  .hd-pc{display:flex;align-items:center;justify-content:space-between;padding:5px 9px;background:var(--surface);border:1px solid var(--line2);border-radius:7px;font-size:11.5px;}
+  .hd-pc .pcl{color:var(--muted);} .hd-pc .pcv{font-family:Sora;font-weight:600;}
+  .hd-pc.ok .pcv{color:var(--exito);} .hd-pc.miss .pcv{color:var(--parcial);}
+  .hd-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--faint);margin-top:2px;}
+  .hd-meta .hm{display:inline-flex;align-items:center;gap:4px;}
+  .hd-timeline{margin-top:4px;position:relative;padding-left:14px;border-left:2px solid var(--line2);}
+  .hd-ev{position:relative;padding:8px 12px;margin-bottom:6px;background:var(--surface);border:1px solid var(--line2);border-radius:8px;font-size:11px;}
+  .hd-ev::before{content:'';position:absolute;left:-20px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--accent);border:2px solid var(--bg2);}
+  .hd-ev .ev-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+  .hd-ev .ev-time{font-family:Sora;font-weight:600;color:var(--muted);} .hd-ev .ev-who{color:var(--accent);font-weight:600;}
+  .hd-ev .ev-device{color:var(--faint);font-size:10px;} .hd-ev .ev-geo{color:var(--faint);font-size:10px;}
+  .hd-ev .ev-vals{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
+  .hd-ev .ev-v{padding:2px 7px;background:var(--surface2);border-radius:5px;font-size:10.5px;color:var(--muted);}
+  .hd-ev .ev-v b{color:var(--ink);font-family:Sora;}
+  .hd-loading{color:var(--faint);font-size:11px;padding:8px 0;}
   .empty{padding:30px 16px;color:var(--faint);text-align:center;font-size:13px;}
 
   .online-panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:12px 16px;margin-bottom:16px;}
@@ -184,12 +203,12 @@
       <span class="rt" id="rtBadge"><span class="rd"></span>tempo real</span>
       <div class="month-nav"><button id="prevM">‹</button><div class="mlabel num" id="mLabel">—</div><button id="nextM">›</button></div>
       <button class="icon-btn adminOnly" id="btnGer" title="Geradores">👥</button>
-      <button class="icon-btn adminOnly" id="openCfg" title="Ajustes do modelo">⚙</button>
+      <button class="icon-btn managerOnly" id="openCfg" title="Ajustes do modelo">⚙</button>
       <button class="icon-btn" id="btnOut" title="Sair">⎋</button>
     </div>
   </header>
 
-  <div class="online-panel adminOnly" id="onlinePanel">
+  <div class="online-panel managerOnly" id="onlinePanel">
     <div class="op-title">Online agora <span class="oc" id="onlineCount">0</span></div>
     <div class="op-list" id="onlineList"><span class="op-empty">ninguém conectado</span></div>
   </div>
@@ -316,7 +335,7 @@
   async function fetchStructure(){
     const gq=await sb.from('geradores').select('*').order('nome'); geradores=gq.data||[];
     const mq=await sb.from('models').select('*').order('nome'); models=mq.data||[];
-    if(role==='admin'){ const pq=await sb.from('model_prices').select('*'); prices={}; (pq.data||[]).forEach(p=>prices[p.model_id]=p); }
+    if(seesMoney){ const pq=await sb.from('model_prices').select('*'); prices={}; (pq.data||[]).forEach(p=>prices[p.model_id]=p); }
     if(!curMid || !model(curMid)) curMid = models.length?models[0].id:null;
   }
   async function fetchMonth(){
@@ -330,28 +349,34 @@
 
   // ---------------- render ----------------
   function renderTabs(){
-    const box=$('#modelTabs'); box.innerHTML=''; const admin=role==='admin';
-    if(!models.length){ const e=document.createElement('div');e.style.cssText='color:var(--faint);font-size:13px;padding:4px 2px';e.textContent=admin?'Nenhum modelo. Abra 👥 para adicionar.':'Nenhum modelo atribuído a você ainda.';box.appendChild(e);return; }
+    const box=$('#modelTabs'); box.innerHTML='';
+    if(!models.length){ const e=document.createElement('div');e.style.cssText='color:var(--faint);font-size:13px;padding:4px 2px';e.textContent=seesAll?'Nenhum modelo cadastrado.':'Nenhum modelo atribuído a você ainda.';box.appendChild(e);return; }
     models.forEach(mo=>{
       const el=document.createElement('div');el.className='mtab'+(mo.id===curMid?' on':'');el.dataset.m=mo.id;
-      const tag=admin?(mo.gerador_id&&gerName(mo.gerador_id)?`<span class="gtag">@${esc(gerName(mo.gerador_id))}</span>`:`<span class="gtag none">sem gerador</span>`):'';
+      const tag=seesAll?(mo.gerador_id&&gerName(mo.gerador_id)?`<span class="gtag">@${esc(gerName(mo.gerador_id))}</span>`:`<span class="gtag none">sem gerador</span>`):'';
       const m=metrics(mo.id);
       const dc=m.comp>=mo.meta_com?'var(--exito)':(m.comp>0?'var(--parcial)':'var(--faint)');
-      const ts=admin?`${m.comp}/${mo.meta_com} · ${fmt(m.ganho)}`:`${m.comp} dias · ${m.pec} peças`;
+      const ts=seesMoney?`${m.comp}/${mo.meta_com} · ${fmt(m.ganho)}`:`${m.comp} dias · ${m.pec} peças`;
       el.innerHTML=`<span class="dt" style="color:${dc};background:${dc}"></span><span class="info"><span class="tn">${esc(mo.nome)}${tag}</span><span class="ts">${ts}</span></span>`;
       el.addEventListener('click',()=>{if(mo.id!==curMid){curMid=mo.id;renderAll();}});
       box.appendChild(el);
     });
-    if(admin){const a=document.createElement('div');a.className='mtab add';a.textContent='＋ Modelo';a.addEventListener('click',addModel);box.appendChild(a);}
+    if(isAdmin){const a=document.createElement('div');a.className='mtab add';a.textContent='＋ Modelo';a.addEventListener('click',addModel);box.appendChild(a);}
   }
   function renderKPIs(){
-    if(!curMid){$('#kpis').innerHTML='';return;} const admin=role==='admin', m=metrics(curMid), mo=model(curMid);
-    if(admin){
+    if(!curMid){$('#kpis').innerHTML='';return;} const m=metrics(curMid), mo=model(curMid);
+    if(seesMoney){
       const faltam=Math.max(0,mo.meta_com-m.comp);
       $('#kpis').innerHTML=`
         <div class="card"><div class="lbl">Dias completos</div><div class="big num">${m.comp}<span style="font-size:15px;color:var(--muted);font-weight:600"> / ${mo.dias_alvo}</span></div><div class="sub">${m.parc} parciais</div></div>
         <div class="card"><div class="lbl">Comissão</div><div class="big num">${m.comp}<span style="font-size:15px;color:var(--muted);font-weight:600"> / ${mo.meta_com}</span></div><span class="pill ${m.liberada?'ok':'no'}"><span class="dot"></span>${m.liberada?'Liberada':(faltam+' dia'+(faltam!==1?'s':'')+' p/ liberar')}</span></div>
         <div class="card pay"><div class="lbl">A pagar ao criador</div><div class="big num">${fmt(m.ganho)}</div><div class="sub">de ${fmt(m.alvoMes)} (mês cheio)</div></div>`;
+    } else if(isHead){
+      const faltam=Math.max(0,mo.meta_com-m.comp);
+      $('#kpis').innerHTML=`
+        <div class="card hl"><div class="lbl">Dias completos</div><div class="big num">${m.comp}<span style="font-size:15px;color:#C7C1F7;font-weight:600"> / ${mo.dias_alvo}</span></div><div class="sub">${m.parc} parciais · ${m.pec} peças</div></div>
+        <div class="card"><div class="lbl">Meta de comissão</div><div class="big num">${m.comp}<span style="font-size:15px;color:var(--muted);font-weight:600"> / ${mo.meta_com}</span></div><span class="pill ${m.liberada?'ok':'no'}"><span class="dot"></span>${m.liberada?'No caminho':(faltam+' dia'+(faltam!==1?'s':'')+' faltam')}</span></div>
+        <div class="card"><div class="lbl">Sequência</div><div class="big num">${m.streak}</div><div class="sub">dias completos seguidos</div></div>`;
     } else {
       $('#kpis').innerHTML=`
         <div class="card hl"><div class="lbl">Dias completos</div><div class="big num">${m.comp}<span style="font-size:15px;color:#C7C1F7;font-weight:600"> / ${mo.dias_alvo}</span></div><div class="sub">objetivo do mês</div></div>
@@ -364,7 +389,7 @@
   function renderCal(){
     $('#mLabel').textContent=`${MO[vM]} ${vY}`; const cal=$('#cal');cal.innerHTML='';
     if(!curMid){cal.innerHTML='<div class="empty" style="grid-column:1/-1">Selecione ou crie um modelo.</div>';return;}
-    const data=entries[curMid]||{}, admin=role==='admin', pr=priceOf(curMid);
+    const data=entries[curMid]||{}, pr=priceOf(curMid);
     const lead=(new Date(vY,vM,1).getDay()+6)%7, frag=document.createDocumentFragment();
     for(let i=0;i<lead;i++){const b=document.createElement('div');b.className='day blank';frag.appendChild(b);}
     const dim=new Date(vY,vM+1,0).getDate();
@@ -372,7 +397,7 @@
       const key=ymd(vY,vM,d),e=data[key],st=statusOf(e),wd=new Date(vY,vM,d).getDay();
       const el=document.createElement('div');el.className='day'+(st!=='pendente'?' '+st:'')+((wd===0||wd===6)?' wknd':'');if(key===todayStr)el.classList.add('today');
       el.tabIndex=0;el.setAttribute('role','button');
-      let b=''; if(st!=='pendente') b=admin?`<div class="amt num">${fmt(earned(e,pr)).replace('R$ ','R$')}</div>`:`<div class="amt num">${pecas(e)}/${PECAS_ALVO}</div>`;
+      let b=''; if(st!=='pendente') b=seesMoney?`<div class="amt num">${fmt(earned(e,pr)).replace('R$ ','R$')}</div>`:`<div class="amt num">${pecas(e)}/${PECAS_ALVO}</div>`;
       el.innerHTML=`<div class="dn">${d}</div>${b}`;
       el.addEventListener('click',()=>openDay(key,d)); el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openDay(key,d);}});
       frag.appendChild(el);
@@ -396,23 +421,85 @@
   function showNotif(title,body){ const el=$('#notifToast'); $('#ntTitle').textContent=title; $('#ntBody').textContent=body; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove('show'),4000); }
 
   function renderHist(){
-    const admin=role==='admin', data=entries[curMid]||{}, pr=priceOf(curMid);
-    const dim=new Date(vY,vM+1,0).getDate(), rows=[], col={completo:'var(--exito)',parcial:'var(--parcial)'}, lbl={completo:'Completo',parcial:'Parcial'};
-    for(let d=dim;d>=1;d--){const key=ymd(vY,vM,d),e=data[key],st=statusOf(e);if(st==='pendente')continue;const dt=new Date(vY,vM,d);
-      const right=admin?`<span class="hval num" style="color:${col[st]}">${fmt(earned(e,pr))}</span>`:`<span class="hval num" style="color:${col[st]}">${pecas(e)}/${PECAS_ALVO}</span>`;
-      let meta='';
-      if(admin && e){
-        const time=fmtTime(e.updated_at||e.created_at);
-        const dev=e.device||'';
-        const geo=e.geo||'';
-        const edits=(e.edit_count||1)>1?`<span class="hedit">editado ${e.edit_count}×</span>`:'';
-        meta=`<div class="hmeta"><span>${time}${dev?' · '+dev:''}</span>${geo?'<span>'+esc(geo)+'</span>':''}${edits}</div>`;
+    const data=entries[curMid]||{}, pr=priceOf(curMid);
+    const dim=new Date(vY,vM+1,0).getDate(), col={completo:'var(--exito)',parcial:'var(--parcial)'}, lbl={completo:'Completo',parcial:'Parcial'};
+    const histEl=$('#hist'); histEl.innerHTML='';
+    const pieceLabels={foto_feed:'Foto feed',reel:'Reels',video_com:'Vídeo',foto_com:'Foto com.',vip:'VIP 18+'};
+    let hasRows=false;
+    for(let d=dim;d>=1;d--){
+      const key=ymd(vY,vM,d),e=data[key],st=statusOf(e);if(st==='pendente')continue;
+      hasRows=true; const dt=new Date(vY,vM,d);
+      const right=seesMoney?`<span class="hval num" style="color:${col[st]}">${fmt(earned(e,pr))}</span>`:`<span class="hval num" style="color:${col[st]}">${pecas(e)}/${PECAS_ALVO}</span>`;
+      const edits=(e.edit_count||1)>1?` · editado ${e.edit_count}×`:'';
+      // row
+      const row=document.createElement('div');row.className='hrow';row.dataset.key=key;row.dataset.d=d;
+      row.innerHTML=`<span class="hd" style="background:${col[st]}"></span><span class="hdate">${pad(d)}/${pad(vM+1)}</span><span class="hwk">${WK[dt.getDay()]}</span><span class="hnote">${lbl[st]}${edits}${e.nota?' · '+esc(e.nota):''}</span>${right}<span class="hchev">▶</span>`;
+      histEl.appendChild(row);
+      // detail (hidden)
+      const detail=document.createElement('div');detail.className='hdetail';detail.id='hd-'+key;
+      histEl.appendChild(detail);
+      // toggle
+      row.addEventListener('click',()=>{
+        const wasOpen=row.classList.contains('open');
+        // close all
+        histEl.querySelectorAll('.hrow.open').forEach(r=>{r.classList.remove('open');});
+        histEl.querySelectorAll('.hdetail.show').forEach(r=>{r.classList.remove('show');});
+        if(!wasOpen){ row.classList.add('open'); detail.classList.add('show'); loadDayDetail(key,d,e,detail,pr); }
+      });
+    }
+    if(!hasRows) histEl.innerHTML='<div class="empty">Nenhum dia lançado neste mês.</div>';
+  }
+  async function loadDayDetail(key,d,e,detail,pr){
+    const pieceLabels={foto_feed:'Foto feed',reel:'Reels',video_com:'Vídeo',foto_com:'Foto com.',vip:'VIP 18+'};
+    const targets={foto_feed:2,reel:3,video_com:1,foto_com:2,vip:1};
+    // piece breakdown
+    let piecesHtml=CT.map(ct=>{
+      const v=e[ct.key]||0, ok=v>=ct.target;
+      return `<div class="hd-pc ${ok?'ok':'miss'}"><span class="pcl">${ct.label}</span><span class="pcv">${v}/${ct.target}</span></div>`;
+    }).join('');
+    // meta info
+    let metaHtml='';
+    if(seesAll){
+      const parts=[];
+      const time=fmtTime(e.updated_at||e.created_at);
+      if(time) parts.push(`<span class="hm">🕐 ${time}</span>`);
+      if(e.device) parts.push(`<span class="hm">📱 ${esc(e.device)}</span>`);
+      if(e.ip) parts.push(`<span class="hm">🌐 ${esc(e.ip)}</span>`);
+      if(e.geo) parts.push(`<span class="hm">📍 ${esc(e.geo)}</span>`);
+      if(parts.length) metaHtml=`<div class="hd-meta">${parts.join('')}</div>`;
+    }
+    detail.innerHTML=`
+      <div class="hd-sec">Peças do dia</div>
+      <div class="hd-pieces">${piecesHtml}</div>
+      ${metaHtml?'<div class="hd-sec">Último lançamento</div>'+metaHtml:''}
+      ${seesAll?'<div class="hd-sec">Histórico de edições</div><div class="hd-timeline" id="htl-'+key+'"><div class="hd-loading">carregando...</div></div>':''}
+    `;
+    // fetch edit history from entry_history table
+    if(seesAll && e.id){
+      const {data:history,error}=await sb.from('entry_history').select('*').eq('entry_id',e.id).order('changed_at',{ascending:false});
+      const tlEl=detail.querySelector('#htl-'+key);
+      if(error||!history||!history.length){
+        tlEl.innerHTML='<div class="hd-loading" style="color:var(--faint)">Sem histórico de edições registrado.</div>';
+        return;
       }
-      rows.push(`<div class="hrow"><span class="hd" style="background:${col[st]}"></span><span class="hdate">${pad(d)}/${pad(vM+1)}</span><span class="hwk">${WK[dt.getDay()]}</span><span class="hnote">${lbl[st]}${e.nota?' · '+esc(e.nota):''}</span>${meta}${right}</div>`);}
-    $('#hist').innerHTML=rows.length?rows.join(''):'<div class="empty">Nenhum dia lançado neste mês.</div>';
+      tlEl.innerHTML=history.map((h,i)=>{
+        const isFirst=i===history.length-1;
+        const vals=CT.map(ct=>`<span class="ev-v">${ct.label} <b>${h[ct.key]||0}</b></span>`).join('');
+        return `<div class="hd-ev">
+          <div class="ev-top">
+            <span class="ev-time">${fmtTime(h.changed_at)}</span>
+            <span class="ev-who">@${esc(h.changed_by||'?')}</span>
+            ${h.device?`<span class="ev-device">📱 ${esc(h.device)}</span>`:''}
+            ${h.geo?`<span class="ev-geo">📍 ${esc(h.geo)}</span>`:''}
+          </div>
+          <div class="ev-vals">${vals}</div>
+          ${h.nota?`<div style="color:var(--muted);margin-top:3px;font-size:10.5px">📝 ${esc(h.nota)}</div>`:''}
+        </div>`;
+      }).join('');
+    }
   }
   function renderFech(){
-    if(role!=='admin')return; const box=$('#fech'); let grand=0,libTot=0,modTot=0,blocks='';
+    if(!isAdmin)return; const box=$('#fech'); let grand=0,libTot=0,modTot=0,blocks='';
     geradores.forEach(g=>{const ms=modelsOf(g.id);if(!ms.length)return;let gtot=0,rows='';
       ms.forEach(mo=>{const m=metrics(mo.id);gtot+=m.ganho;modTot++;if(m.liberada)libTot++;
         const pc=m.liberada?'var(--exito)':'var(--falta)',pb=m.liberada?'var(--exito-soft)':'rgba(242,109,109,.13)';
@@ -422,7 +509,7 @@
     if(un.length)blocks+=`<div class="gerblk"><div class="gh"><span class="gn" style="color:var(--faint)">sem gerador (${un.length})</span></div></div>`;
     box.innerHTML=`<div class="fh"><div><div class="ftl">Fechamento do mês — total a pagar</div><div class="ftv num">${fmt(grand)}</div></div><div class="fsub">Comissões liberadas: <b>${libTot}/${modTot}</b></div></div>${blocks||'<div class="empty">Cadastre modelos e geradores.</div>'}`;
   }
-  function renderAll(){ renderTabs(); renderKPIs(); renderCal(); if(role==='admin')renderFech(); }
+  function renderAll(){ renderTabs(); renderKPIs(); renderCal(); if(isAdmin)renderFech(); }
 
   // ---------------- day editor ----------------
   function openDay(key,d){
@@ -434,10 +521,10 @@
     $('#dayNote').value=editEntry.nota; renderSteps(); updateDayInfo(); $('#dayBackdrop').classList.add('show');
   }
   function renderSteps(){
-    const box=$('#steps');box.innerHTML='';const admin=role==='admin',pr=priceOf(curMid);
+    const box=$('#steps');box.innerHTML='';const pr=priceOf(curMid);
     CT.forEach(ct=>{const v=editEntry[ct.key]||0,full=v>=ct.target;
-      const sub=admin?fmt(cnt(editEntry,ct.key)*pr[ct.price]):(full?'ok':'faltam '+(ct.target-v));
-      const dest=admin?`${ct.dest} · ${fmt(pr[ct.price])} cada`:ct.dest;
+      const sub=seesMoney?fmt(cnt(editEntry,ct.key)*pr[ct.price]):(full?'ok':'faltam '+(ct.target-v));
+      const dest=seesMoney?`${ct.dest} · ${fmt(pr[ct.price])} cada`:ct.dest;
       const row=document.createElement('div');row.className='steprow'+(full?' full':'');
       row.innerHTML=`<div class="stepinfo"><div class="stepname">${ct.label}</div><div class="stepdest">${dest}</div></div><div class="stepper"><button data-dec ${v<=0?'disabled':''}>−</button><span class="stepval num">${v}</span><span class="steptgt">/${ct.target}</span><button data-inc ${v>=ct.target?'disabled':''}>＋</button></div><div class="stepsub num">${sub}</div>`;
       row.querySelector('[data-dec]').addEventListener('click',()=>{editEntry[ct.key]=Math.max(0,(editEntry[ct.key]||0)-1);renderSteps();updateDayInfo();});
@@ -445,8 +532,8 @@
       box.appendChild(row);});
   }
   function updateDayInfo(){
-    const st=statusOf(editEntry),admin=role==='admin';
-    if(admin){const pr=priceOf(curMid);$('#dtLabel').textContent='Valor do dia';$('#dayVal').textContent=fmt(earned(editEntry,pr));$('#dayMax').textContent='/ '+fmt(diaria(pr));
+    const st=statusOf(editEntry);
+    if(seesMoney){const pr=priceOf(curMid);$('#dtLabel').textContent='Valor do dia';$('#dayVal').textContent=fmt(earned(editEntry,pr));$('#dayMax').textContent='/ '+fmt(diaria(pr));
       const map={completo:['Dia completo','var(--exito)','var(--exito-soft)'],parcial:['Parcial · pago proporcional','var(--parcial)','var(--parcial-soft)'],pendente:['Nada lançado — não será pago','var(--faint)','var(--surface2)']};
       const [t,c,b]=map[st];$('#dayBadge').innerHTML=`<span class="daybadge" style="color:${c};background:${b}"><span class="bd" style="background:${c}"></span>${t}</span>`;
     } else {const p=pecas(editEntry);$('#dtLabel').textContent='Pacote do dia';$('#dayVal').textContent=`${p}/${PECAS_ALVO}`;$('#dayMax').textContent='peças';
@@ -473,10 +560,19 @@
   function openCfg(){
     if(!curMid){flash('Nenhum modelo');return;} const mo=model(curMid),pr=priceOf(curMid);
     $('#cfgWho').textContent=mo.nome;$('#cfgModelName').value=mo.nome;
+    // nome do modelo: head pode ver, não editar
+    $('#cfgModelName').disabled=isHead;
     const gsel=$('#cfgGerador');gsel.innerHTML='<option value="">— sem gerador —</option>';
     geradores.forEach(g=>{const o=document.createElement('option');o.value=g.id;o.textContent=g.nome+' ('+modelsOf(g.id).length+'/2)';if(g.id===mo.gerador_id)o.selected=true;gsel.appendChild(o);});
+    // preços e metas: só admin
+    $$('#cfgBackdrop .cfg-sec').forEach((el,i)=>el.style.display=isAdmin?'':'none');
+    $$('#cfgBackdrop .cfg-grid').forEach(el=>el.style.display=isAdmin?'':'none');
+    $$('#cfgBackdrop .cfg-row').forEach((el,i)=>{
+      if(i>=2) el.style.display=isAdmin?'':'none'; // esconde preços e metas pra head
+    });
     $('#pFoto').value=pr.foto;$('#pReel').value=pr.reel;$('#pVideo').value=pr.video;$('#pVip').value=pr.vip;
-    $('#cfgDiasAlvo').value=mo.dias_alvo;$('#cfgMetaCom').value=mo.meta_com;$('#delModel').style.display=models.length>1?'':'none';
+    $('#cfgDiasAlvo').value=mo.dias_alvo;$('#cfgMetaCom').value=mo.meta_com;
+    $('#delModel').style.display=isAdmin&&models.length>1?'':'none';
     $('#cfgBackdrop').classList.add('show');
   }
   $('#openCfg').addEventListener('click',openCfg);
@@ -485,9 +581,14 @@
   $('#cfgSave').addEventListener('click',async()=>{
     const mo=model(curMid), newGer=$('#cfgGerador').value;
     if(newGer&&newGer!==mo.gerador_id&&modelsOf(newGer).length>=2){flash('Esse gerador já tem 2 modelos');return;}
-    const nome=$('#cfgModelName').value.trim()||mo.nome;
-    await sb.from('models').update({nome,gerador_id:newGer||null,dias_alvo:Math.max(1,Math.round(pn('#cfgDiasAlvo',21))),meta_com:Math.max(1,Math.round(pn('#cfgMetaCom',16)))}).eq('id',curMid);
-    await sb.from('model_prices').upsert({model_id:curMid,foto:pn('#pFoto',5),reel:pn('#pReel',10),video:pn('#pVideo',10),vip:pn('#pVip',11)},{onConflict:'model_id'});
+    if(isAdmin){
+      const nome=$('#cfgModelName').value.trim()||mo.nome;
+      await sb.from('models').update({nome,gerador_id:newGer||null,dias_alvo:Math.max(1,Math.round(pn('#cfgDiasAlvo',21))),meta_com:Math.max(1,Math.round(pn('#cfgMetaCom',16)))}).eq('id',curMid);
+      await sb.from('model_prices').upsert({model_id:curMid,foto:pn('#pFoto',5),reel:pn('#pReel',10),video:pn('#pVideo',10),vip:pn('#pVip',11)},{onConflict:'model_id'});
+    } else {
+      // head: só atualiza gerador_id
+      await sb.from('models').update({gerador_id:newGer||null}).eq('id',curMid);
+    }
     $('#cfgBackdrop').classList.remove('show'); await reloadAll(); flash('Ajustes salvos');
   });
   $('#delModel').addEventListener('click',async()=>{ if(models.length<=1){flash('Mantenha ao menos um modelo');return;} await sb.from('models').delete().eq('id',curMid); curMid=null; $('#cfgBackdrop').classList.remove('show'); await reloadAll(); flash('Modelo removido'); });
@@ -539,27 +640,34 @@
     presChannel.subscribe(async(st)=>{ if(st==='SUBSCRIBED') await presChannel.track({email:myEmail,role,joined:new Date().toISOString()}); });
   }
   function renderOnline(state){
-    if(role!=='admin')return;
+    if(!seesAll)return;
     const users=Object.values(state||{}).flat().map(u=>u.email).filter(Boolean);
     const unique=[...new Set(users)];
     $('#onlineCount').textContent=unique.length;
     if(!unique.length){$('#onlineList').innerHTML='<span class="op-empty">ninguém conectado</span>';return;}
     $('#onlineList').innerHTML=unique.map(email=>{
       const g=geradores.find(x=>x.email===email);
-      const label=g?g.nome:(email===myEmail?'Você (admin)':email);
+      const label=g?g.nome:(email===myEmail?(isAdmin?'Você (admin)':'Você (head)'):email);
       return `<div class="op-user"><span class="od"></span>${esc(label)}</div>`;
     }).join('');
   }
+
+  let isAdmin=false, isHead=false, seesAll=false, seesMoney=false;
 
   // ---------------- auth / boot ----------------
   async function boot(){
     $('#authGate').style.display='none'; $('#app').style.display='';
     const {data:{user}}=await sb.auth.getUser(); myEmail=user?user.email:'';
-    const r=await sb.rpc('my_role'); role=(r.data==='admin')?'admin':'gerador';
-    const admin=role==='admin';
-    $('#subHead').textContent=admin?('CRM Material · '+myEmail):('Gerador · '+myEmail);
-    $$('.adminOnly').forEach(el=>el.style.display=admin?'':'none');
-    $('#disc').textContent=admin?'Venus IA · Pagamento por entrega. Cada modelo tem a tag do seu gerador. Atualiza em tempo real.':'Venus IA · Registre as peças concluídas. Meta: completar o pacote do dia.';
+    const r=await sb.rpc('my_role'); role=r.data||'gerador';
+    isAdmin=role==='admin'; isHead=role==='head';
+    seesAll=isAdmin||isHead; seesMoney=isAdmin;
+    const roleLabel=isAdmin?'Administrador':isHead?'Head de Material':'Gerador';
+    $('#subHead').textContent=`${roleLabel} · ${myEmail}`;
+    $$('.adminOnly').forEach(el=>el.style.display=isAdmin?'':'none');
+    $$('.managerOnly').forEach(el=>el.style.display=seesAll?'':'none');
+    $('#disc').textContent=isAdmin?'Venus IA · Pagamento por entrega. Cada modelo tem a tag do seu gerador. Atualiza em tempo real.'
+      :isHead?'Venus IA · Gestão de material. Organize geradores e acompanhe entregas em tempo real.'
+      :'Venus IA · Registre as peças concluídas. Meta: completar o pacote do dia.';
     await reloadAll(); subscribeRealtime(); subscribePresence();
   }
   async function doLogin(){
